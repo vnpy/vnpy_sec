@@ -28,7 +28,7 @@ from vnpy.trader.object import (
 )
 from vnpy.trader.utility import get_folder_path
 
-from vnhw.api.sec import (
+from vnpy_sec.api import (
     MdApi,
     TdApi,
     DFITCSEC_EI_SH,
