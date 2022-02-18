@@ -112,6 +112,8 @@ class SecGateway(BaseGateway):
     VN Trader Gateway for dfitc .
     """
 
+    default_name: str = "SEC"
+
     default_setting: Dict[str, Any] = {
         "账号": "",
         "行情密码": "",
@@ -127,7 +129,7 @@ class SecGateway(BaseGateway):
 
     exchanges: List[Exchange] = list(EXCHANGE_VT2SEC.keys())
 
-    def __init__(self, event_engine: EventEngine, gateway_name="SEC"):
+    def __init__(self, event_engine: EventEngine, gateway_name: str) -> None:
         """"""
         super().__init__(event_engine, gateway_name)
 
