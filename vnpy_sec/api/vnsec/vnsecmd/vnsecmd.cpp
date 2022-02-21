@@ -1088,7 +1088,6 @@ int MdApi::reqStockUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
-	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqStockUserLogin(&myreq);
 	return i;
 };
@@ -1113,7 +1112,6 @@ int MdApi::reqSOPUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
-	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqSOPUserLogin(&myreq);
 	return i;
 };
@@ -1128,7 +1126,6 @@ int MdApi::reqFASLUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
-	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqFASLUserLogin(&myreq);
 	return i;
 };
