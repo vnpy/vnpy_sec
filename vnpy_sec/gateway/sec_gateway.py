@@ -432,7 +432,7 @@ class SecMdApi(MdApi):
 
         if not self.connect_status:
             path: str = str(get_folder_path(self.gateway_name.lower()))
-            self.createDFITCMdApi(path)
+            self.createDFITCMdApi(path.encode("GBK"))
             self.init(md_address)
 
     def login_server(self) -> None:
@@ -950,7 +950,7 @@ class SecTdApi(TdApi):
 
         if not self.connect_status:
             path: str = str(get_folder_path(self.gateway_name.lower()))
-            self.createDFITCSECTraderApi(path)
+            self.createDFITCSECTraderApi(path.encode("GBK"))
 
             self.subscribePrivateTopic(2)
             self.init(td_address)
