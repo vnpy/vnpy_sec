@@ -117,7 +117,7 @@ COMPRESS_VT2SEC: Dict[str, int] = {
 CHINA_TZ = pytz.timezone("Asia/Shanghai")
 
 # 合约数据全局缓存字典
-symbol_name_map: Dict[str, str] = {}
+symbol_contract_map: Dict[str, ContractData] = {}
 
 
 class SecGateway(BaseGateway):
@@ -361,7 +361,10 @@ class SecMdApi(MdApi):
         tick.ask_volume_4 = data["askQty4"]
         tick.ask_volume_5 = data["askQty5"]
 
-        tick.name = symbol_name_map.get(tick.vt_symbol, tick.symbol)
+        contract: ContractData = symbol_contract_map.get(tick.symbol, None)
+        if contract:
+            tick.name = contract.name
+
         self.gateway.on_tick(tick)
 
     def onStockMarketData(self, data: dict) -> None:
@@ -408,7 +411,10 @@ class SecMdApi(MdApi):
         tick.ask_volume_4 = data["askQty4"]
         tick.ask_volume_5 = data["askQty5"]
 
-        tick.name = symbol_name_map.get(tick.vt_symbol, tick.symbol)
+        contract: ContractData = symbol_contract_map.get(tick.symbol, None)
+        if contract:
+            tick.name = contract.name
+
         self.gateway.on_tick(tick)
 
     def connect(
@@ -811,6 +817,8 @@ class SecTdApi(TdApi):
             )
             self.gateway.on_contract(contract)
 
+            symbol_contract_map[contract.symbol] = contract
+
         if last:
             msg: str = "股票交易合约信息获取完成"
             self.gateway.write_log(msg)
@@ -840,6 +848,8 @@ class SecTdApi(TdApi):
         )
 
         self.gateway.on_contract(contract)
+
+        symbol_contract_map[contract.symbol] = contract
 
         if last:
             msg: str = "期权交易合约信息获取完成"
