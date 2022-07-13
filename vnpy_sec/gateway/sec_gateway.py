@@ -1,7 +1,6 @@
 from typing import Any, Dict, List
 from datetime import datetime
 from copy import copy
-import pytz
 
 from vnpy.event import EventEngine
 from vnpy.trader.event import EVENT_TIMER
@@ -26,7 +25,7 @@ from vnpy.trader.object import (
     PositionData,
     AccountData
 )
-from vnpy.trader.utility import get_folder_path
+from vnpy.trader.utility import get_folder_path, ZoneInfo
 
 from ..api import (
     MdApi,
@@ -114,7 +113,7 @@ COMPRESS_VT2SEC: Dict[str, int] = {
 }
 
 # 其他常量
-CHINA_TZ = pytz.timezone("Asia/Shanghai")
+CHINA_TZ = ZoneInfo("Asia/Shanghai")
 
 # 合约数据全局缓存字典
 symbol_contract_map: Dict[str, ContractData] = {}
@@ -320,8 +319,7 @@ class SecMdApi(MdApi):
     def onSOPMarketData(self, data: dict) -> None:
         """股票期权行情数据推送"""
         timestamp: str = str(data["tradingDay"]) + str(data["updateTime"])
-        dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-        dt: datetime = CHINA_TZ.localize(dt)
+        dt: datetime = generate_datetime(timestamp)
 
         tick: TickData = TickData(
             symbol=data["securityID"],
@@ -370,8 +368,7 @@ class SecMdApi(MdApi):
     def onStockMarketData(self, data: dict) -> None:
         """股票行情数据推送"""
         timestamp: str = str(data["tradingDay"]) + str(data["updateTime"])
-        dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-        dt: datetime = CHINA_TZ.localize(dt)
+        dt: datetime = generate_datetime(timestamp)
 
         tick: TickData = TickData(
             symbol=data["securityID"],
@@ -554,8 +551,8 @@ class SecTdApi(TdApi):
             order: OrderData = self.orders[orderid]
         else:
             timestamp: str = self.trading_day + str(data["entrustTime"])
-            dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-            dt: datetime = CHINA_TZ.localize(dt)
+            dt: datetime = generate_datetime(timestamp)
+
             order: OrderData = OrderData(
                 symbol=data["securityID"],
                 exchange=EXCHANGE_SEC2VT[data["exchangeID"]],
@@ -587,8 +584,7 @@ class SecTdApi(TdApi):
             order: OrderData = self.orders[orderid]
         else:
             timestamp: str = self.trading_day + str(data["entrustTime"])
-            dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-            dt: datetime = CHINA_TZ.localize(dt)
+            dt: datetime = generate_datetime(timestamp)
 
             order: OrderData = OrderData(
                 symbol=data["securityID"],
@@ -615,8 +611,7 @@ class SecTdApi(TdApi):
     def onStockTradeRtn(self, data: dict) -> None:
         """股票成交数据推送"""
         timestamp: str = self.trading_day + str(data["tradeTime"])
-        dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-        dt: datetime = CHINA_TZ.localize(dt)
+        dt: datetime = generate_datetime(timestamp)
         localid: str = str(data["localOrderID"])
         sessionid: str = str(data["sessionID"])
         orderid: str = f"{sessionid}_{localid}"
@@ -657,8 +652,7 @@ class SecTdApi(TdApi):
     def onSOPTradeRtn(self, data: dict) -> None:
         """股票期权成交数据推送"""
         timestamp: str = self.trading_day + str(data["tradeTime"])
-        dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-        dt: datetime = CHINA_TZ.localize(dt)
+        dt: datetime = generate_datetime(timestamp)
         localid: str = str(data["localOrderID"])
         sessionid: str = str(data["sessionID"])
         orderid: str = f"{sessionid}_{localid}"
@@ -706,12 +700,11 @@ class SecTdApi(TdApi):
         if orderid in self.orders:
             order: OrderData = self.orders[orderid]
             dt: datetime = datetime.now()
-            dt: datetime = CHINA_TZ.localize(dt)
+            dt: datetime = dt.replace(tzinfo=CHINA_TZ)
             order.datetime = dt
         else:
             timestamp: str = self.trading_day + str(data["entrustTime"])
-            dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-            dt: datetime = CHINA_TZ.localize(dt)
+            dt: datetime = generate_datetime(timestamp)
             order: OrderData = OrderData(
                 symbol=data["securityID"],
                 exchange=EXCHANGE_SEC2VT[data["exchangeID"]],
@@ -740,8 +733,8 @@ class SecTdApi(TdApi):
             order: OrderData = self.orders[orderid]
         else:
             timestamp: str = self.trading_day + str(data["entrustTime"])
-            dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
-            dt: datetime = CHINA_TZ.localize(dt)
+            dt: datetime = generate_datetime(timestamp)
+
             order: OrderData = OrderData(
                 symbol=data["securityID"],
                 exchange=EXCHANGE_SEC2VT[data["exchangeID"]],
@@ -771,7 +764,7 @@ class SecTdApi(TdApi):
 
             if order:
                 dt: datetime = datetime.now()
-                dt: datetime = CHINA_TZ.localize(dt)
+                dt: datetime = dt.replace(tzinfo=CHINA_TZ)
                 order.datetime = dt
                 order.status = Status.REJECTED
                 self.gateway.on_order(order)
@@ -788,7 +781,7 @@ class SecTdApi(TdApi):
 
             if order:
                 dt: datetime = datetime.now()
-                dt: datetime = CHINA_TZ.localize(dt)
+                dt: datetime = dt.replace(tzinfo=CHINA_TZ)
                 order.datetime = dt
                 order.status = Status.REJECTED
                 self.gateway.on_order(order)
@@ -1128,3 +1121,9 @@ def get_option_index(strike_price: float, exchange_instrument_id: str) -> str:
     option_index: str = f"{strike_price:.3f}-{index}"
 
     return option_index
+
+def generate_datetime(timestamp: str) -> datetime:
+    """生成时间"""
+    dt: datetime = datetime.strptime(timestamp, "%Y%m%d%H:%M:%S.%f")
+    dt: datetime = dt.replace(tzinfo=CHINA_TZ)
+    return dt
