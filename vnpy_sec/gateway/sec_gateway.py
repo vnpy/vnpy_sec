@@ -560,7 +560,7 @@ class SecTdApi(TdApi):
                 direction=DIRECTION_SEC2VT[data["entrustDirection"]],
                 price=data["entrustPrice"],
                 volume=data["entrustQty"],
-                datetime=data["entrustTime"],
+                datetime=dt,
                 gateway_name=self.gateway_name
             )
             self.orders[orderid] = order
@@ -1121,6 +1121,7 @@ def get_option_index(strike_price: float, exchange_instrument_id: str) -> str:
     option_index: str = f"{strike_price:.3f}-{index}"
 
     return option_index
+
 
 def generate_datetime(timestamp: str) -> datetime:
     """生成时间"""

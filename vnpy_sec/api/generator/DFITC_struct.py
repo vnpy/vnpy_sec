@@ -1960,4 +1960,3 @@ DFITCTerminalInfoField = {
     "clientPublicPort": "int",
     "clientLoginTime": "string",
 }
-
