@@ -9,7 +9,7 @@ def get_ext_modules() -> list:
     Windows需要编译封装接口
     Linux和Mac由于缺乏二进制库支持无法使用
     """
-    if platform.system() == "Windows":
+    if platform.system() == "Linux":
         return []
 
     extra_compile_flags = ["-O2", "-MT"]
