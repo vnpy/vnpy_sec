@@ -4,7 +4,7 @@
  * 文件说明：定义接口所需的数据接口
  * 当前版本：1.6
  * 作者：XSpeed证券项目组
- * 发布日期：2017年03月
+ * 发布日期：2019年11月
  */
 #ifndef DFITCSECAPISTRUCT_H_
 #define DFITCSECAPISTRUCT_H_
@@ -57,6 +57,7 @@ struct APISTRUCT DFITCSECReqUserLoginField
     DFITCSECMDCompressFalgType           compressflag;             //行情压缩标志(N)(只有登录行情账户的时候该字段有效)
     DFITCSECAuthenticCodeType            authenticCode;            //认证码
     DFITCSECAppID                        appID;
+    DFITCSECCollectInterfaceType         collectInterType;         //看穿式监管采集接口类型
 };
 
 //SEC-登录响应
@@ -837,6 +838,7 @@ struct APISTRUCT DFITCSOPReqEntrustOrderField
     DFITCSECSerialIDType                 serialID;                 //扩展流水号(N)(预留字段)
     DFITCSECTDevIDType                   devID;                    //厂商ID(N)
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N)
+	DFITCSECGroupCodeType                groupCode;                //组合编码(Y) 组合单边平仓需要
 };
 
 //SOP-委托响应
@@ -876,6 +878,12 @@ struct APISTRUCT DFITCSOPEntrustOrderRtnField
     DFITCSECMessageType                  noteMsg;                  //结果说明
     DFITCSECTDevIDType                   devID;                    //厂商ID(N),下单时填入该字段，才会返回
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N)，下单时填入该字段，才会返回
+    DFITCSECExchangeGroupTypeType        groupType;                //(预留字段) 组合类型(Y)
+    DFITCSECGroupCodeType                groupCode;                //(预留字段) 组合编码(Y) 拆分委托时传入该字段才会返回
+    DFITCSECSecurityIDType               securityOptionID1;        //(预留字段) 期权代码1腿(Y)
+    DFITCSECSecurityIDType               securityOptionID2;        //(预留字段) 期权代码2腿(Y)
+    DFITCSECSecurityIDType               securityOptionID3;        //(预留字段) 期权代码3腿(N)(预留字段)
+    DFITCSECSecurityIDType               securityOptionID4;        //(预留字段) 期权代码4腿(N)(预留字段)
 };
 
 //SOP-成交回报
@@ -905,6 +913,11 @@ struct APISTRUCT DFITCSOPTradeRtnField
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N),下单时填入该字段，才会返回
     DFITCSECTimeType                     tradeTime;                //成交时间
     DFITCSECGroupCodeType                groupCode;                //组合编码(组合成交后才推送)
+    DFITCSECExchangeGroupTypeType        groupType;                //(预留字段) 组合类型(Y)
+    DFITCSECSecurityIDType               securityOptionID1;        //(预留字段) 期权代码1腿(Y)
+    DFITCSECSecurityIDType               securityOptionID2;        //(预留字段) 期权代码2腿(Y)
+    DFITCSECSecurityIDType               securityOptionID3;        //(预留字段) 期权代码3腿(N)(预留字段)
+    DFITCSECSecurityIDType               securityOptionID4;        //(预留字段) 期权代码4腿(N)(预留字段)
 };
 
 //SOP-撤单回报
@@ -928,6 +941,9 @@ struct APISTRUCT DFITCSOPWithdrawOrderRtnField
     DFITCSECFundsType                    wdUnFreezeFunds;          //撤单解冻资金
     DFITCSECTDevIDType                   devID;                    //厂商ID(N),下单时填入该字段，才会返回
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N),下单时填入该字段，才会返回
+	DFITCSECGroupCodeType                groupCode;                //组合编码(组合单边平仓)
+	DFITCSECSecurityIDType               securityOptionID1;        //(预留字段) 期权代码1腿(Y)
+	DFITCSECSecurityIDType               securityOptionID2;        //(预留字段) 期权代码2腿(Y)
 };
 
 //SOP-做市商报单请求
@@ -1036,6 +1052,12 @@ struct APISTRUCT DFITCSOPRspQrySerialTradeField
     DFITCSECAccountIDType                capitalID;                //资金账号
     DFITCSECTDevIDType                   devID;                    //厂商ID(N),委托时传入该字段才会返回
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N),委托时传入该字段才会返回
+    DFITCSECExchangeGroupTypeType        groupType;                //(预留字段) 组合类型(Y)
+    DFITCSECGroupCodeType                groupCode;                //(预留字段) 组合编码(Y) 拆分委托时传入该字段才会返回
+    DFITCSECSecurityIDType               securityOptionID1;        //(预留字段) 期权代码1腿(Y)
+    DFITCSECSecurityIDType               securityOptionID2;        //(预留字段) 期权代码2腿(Y)
+    DFITCSECSecurityIDType               securityOptionID3;        //(预留字段) 期权代码3腿(N)(预留字段)
+    DFITCSECSecurityIDType               securityOptionID4;        //(预留字段) 期权代码4腿(N)(预留字段)
 };
 
 //SOP-委托查询请求
@@ -1097,6 +1119,12 @@ struct APISTRUCT DFITCSOPRspQryEntrustOrderField
     DFITCSECOrderExpiryDateType          orderExpiryDate;          //订单时效限制
     DFITCSECTDevIDType                   devID;                    //厂商ID(N),委托时传入该字段才会返回
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N),委托时传入该字段才会返回
+    DFITCSECExchangeGroupTypeType        groupType;                //组合类型(Y)
+    DFITCSECGroupCodeType                groupCode;                //组合编码(Y) 拆分委托时传入该字段才会返回
+    DFITCSECSecurityIDType               securityOptionID1;        //期权代码1腿(Y)
+    DFITCSECSecurityIDType               securityOptionID2;        //期权代码2腿(Y)
+    DFITCSECSecurityIDType               securityOptionID3;        //期权代码3腿(N)(预留字段)
+    DFITCSECSecurityIDType               securityOptionID4;        //期权代码4腿(N)(预留字段)
 };
 
 //SOP-持仓查询请求
@@ -1200,6 +1228,7 @@ struct APISTRUCT DFITCSOPRspQryCapitalAccountField
     DFITCSECFundsType                    cashAssets;               //现金资产
     DFITCSECFundsType                    execGuaranteeRatio;       //履约担保比例
     DFITCSECFundsType                    buyLimits;                //买入额度
+	DFITCSECFundsType                    desirableFunds;           //可取资金
 };
 
 //SOP-客户信息查询请求
@@ -1212,7 +1241,7 @@ struct APISTRUCT  DFITCSOPReqQryAccountField
 //SOP-客户信息查询响应
 struct APISTRUCT  DFITCSOPRspQryAccountField
 {
-    DFITCSECRequestIDType                requestID;                //请求
+    DFITCSECRequestIDType                requestID;                //请求ID
     DFITCSECAccountIDType                accountID;                //客户号
     DFITCSECAccountNameType              accountName;              //客户姓名
     DFITCSECAccountNameType              accountFullName;          //客户全名
@@ -1245,6 +1274,7 @@ struct APISTRUCT DFITCSOPReqCalcAbleEntrustQtyField
     DFITCSECCheckUpLimitFlagType         checkUpLimit;             //是否检查委托上限(N)
     DFITCSECTDevIDType                   devID;                    //厂商ID(N)
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N)
+	DFITCSECGroupCodeType                groupCode;                //组合编码(Y) 组合单边平仓
 };
 
 //SOP-可委托数量查询响应
@@ -2244,6 +2274,35 @@ struct APISTRUCT DFITCSOPReqGroupSplitField
     DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N)
 };
 
+//SOP-期权组合行权委托请求
+struct APISTRUCT DFITCSOPReqGroupExectueOrderField
+{
+    DFITCSECRequestIDType                requestID;                //请求ID(Y)
+    DFITCSECAccountIDType                accountID;                //客户号(Y)
+    DFITCSECLocalOrderIDType             localOrderID;             //本地委托号(Y)
+    DFITCSECExchangeIDType               exchangeID;               //交易所代码(Y)
+    DFITCSECSecurityIDType               securityOptionID1;        //期权代码1腿(Y)
+    DFITCSECSecurityIDType               securityOptionID2;        //期权代码2腿(Y)
+    DFITCSECSubAccountIDType             subAccountID;             //子账户编码(N)(预留字段)
+    DFITCSECQuantityType                 entrustQty;               //委托数量(Y)
+    DFITCSECEntrustDirectionType         entrustDirection;         //委托类别(Y)
+    DFITCSECOpenCloseFlagType            openCloseFlag;            //开平标志(Y)
+    DFITCSECOrderCategoryType            orderCategory;            //委托单类别(Y)
+    DFITCSECTDevIDType                   devID;                    //厂商ID(N)
+    DFITCSECTDevDecInfoType              devDecInfo;               //用户自定义字段(N)
+};
+
+//SOP-期权组合行权委托响应
+struct APISTRUCT DFITCSOPRspGroupExectueOrderField
+{
+    DFITCSECRequestIDType                requestID;                //请求ID
+    DFITCSECAccountIDType                accountID;                //客户号
+    DFITCSECLocalOrderIDType             localOrderID;             //本地委托号
+    DFITCSECSpdOrderIDType               spdOrderID;               //柜台委托号
+    DFITCSECTimeType                     entrustTime;              //委托时间
+    DFITCSECFundsType                    freezeFunds;              //冻结资金
+};
+
 //SOP-查询客户组合持仓明细请求
 struct APISTRUCT DFITCSOPReqQryGroupPositionField
 {
@@ -2279,11 +2338,38 @@ struct APISTRUCT DFITCTerminalInfoField
 {
     DFITCSECSystemInfo                   systemInfo;               //采集信息
     DFITCSECSecretkeyVer                 secretkeyVer;             //秘钥版本
-    DFITCSECAppID                        appID;                    //AppID
+    DFITCSECAppID                        appID;                    //中继AppID
     DFITCSECExceptionFlag                exceptionFlag;            //异常标识
-    DFITCSECClientPublicIP               clientPublicIP;           //客户终端公网IP地址
-    DFITCSECClientPublicPort             clientPublicPort;         //客户终端公网端口号
-    DFITCSECClientLoginTime              clientLoginTime;          //客户终端登录时间
+    DFITCSECClientPublicIP               clientPublicIP;           //中继代理公网IP地址
+    DFITCSECClientPublicPort             clientPublicPort;         //中继代理公网端口号
+    DFITCSECClientLoginTime              clientLoginTime;          //中继代理登录时间
+    DFITCSECSystemInfoIntegrity          systemInfo_integrity;     //采集信息完整性
 };
+
+//SOP-资金调入调出请求 
+struct APISTRUCT DFITCSOPReqCapitalTranInOutField
+{
+	DFITCSECRequestIDType                requestID;                //请求ID(Y)
+	DFITCSECAccountIDType                accountID;                //客户号(Y)
+	DFITCSECFundsType					 allocationAmount;		   //调拨金额(Y)
+	DFITCSECCurrencyType                 currency;                 //币种(Y)
+	DFITCSECMessageType                  summaryMsg;               //摘要(N)
+	DFITCSECFundsTransferFlagType        fundsTransFlag;           //资金调转标志(Y)(1调入,2调出)
+
+};
+
+//SOP-资金调入调出响应
+struct APISTRUCT DFITCSOPRspCapitalTranInOutField
+{
+	DFITCSECRequestIDType                requestID;                //请求ID
+	DFITCSECAccountIDType                accountID;                //客户号
+	DFITCSECSerialIDType                 serialID;                 //流水号
+	DFITCSECFundsType                    accountBanlance;          //账户余额
+	DFITCSECFundsType                    availableFunds;           //可用资金（调入返回）
+	DFITCSECFundsType                    t2AvailableFunds;         //T+2可用资金（调入返回）
+	DFITCSECFundsType                    desirableFunds;           //可取资金(调出返回)
+
+};
+
 
 #endif

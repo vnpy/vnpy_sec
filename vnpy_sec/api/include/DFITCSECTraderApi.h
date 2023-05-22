@@ -2,9 +2,9 @@
  * 版权所有(C)2012-2016, 大连飞创信息技术有限公司
  * 文件名称：DFITCSECTraderApi.h
  * 文件说明：定义接口所需的数据接口
- * 当前版本：1.6.85
+ * 当前版本：1.6.88
  * 作者：XSpeed证券项目组
- * 发布日期：2019年6月
+ * 发布日期：2019年11月
  */
 #ifndef DFITCSECTRADERAPI_H_
 #define DFITCSECTRADERAPI_H_
@@ -205,17 +205,17 @@ public:
     * STOCK-委托回报响应
     * @param pData:返回委托回报结构体的地址
     */
-    virtual void OnStockEntrustOrderRtn(DFITCStockEntrustOrderRtnField *pData){};
+    virtual void OnStockEntrustOrderRtn(DFITCStockEntrustOrderRtnField * pData){};
     /**
     * STOCK-成交回报响应
     * @param pData:返回成交回报结构体的地址
     */
-    virtual void OnStockTradeRtn(DFITCStockTradeRtnField *pData){};
+    virtual void OnStockTradeRtn(DFITCStockTradeRtnField * pData){};
     /**
     * STOCK-撤单回报响应
     * @param pData:返回撤单回报结构体的地址
     */
-    virtual void OnStockWithdrawOrderRtn(DFITCStockWithdrawOrderRtnField *pData){};
+    virtual void OnStockWithdrawOrderRtn(DFITCStockWithdrawOrderRtnField * pData){};
     
     /**
     * SOP-登录响应
@@ -249,10 +249,16 @@ public:
     virtual void OnRspSOPQuoteEntrustOrder(DFITCSOPRspQuoteEntrustOrderField *pData, DFITCSECRspInfoField *pRspInfo) {};
     /**
     * SOP-组合拆分委托响应
-    * @param pData:指针若非空,返回用户响应信息结构地址,表明组合拆分委托请求成功
+    * @param pData:指针若非空,返回用户组合拆分委托响应信息结构地址,表明组合拆分委托请求成功
     * @param pRspInfo:指针若非空，返回错误信息地址，表明组合拆分委托请求失败
     */
     virtual void OnRspSOPGroupSplit(DFITCSOPRspEntrustOrderField *pData, DFITCSECRspInfoField *pRspInfo) {};
+    /**
+     * SOP-期权组合行权委托响应
+     * @param pData:指针若非空,返回用户期权组合行权委托响应信息结构地址,表明期权组合行权委托请求成功
+     * @return pRspInfo:指针若非空，返回错误信息地址，表明期权组合行权委托请求失败，具体错误请对照error.xml  
+     */
+    virtual void OnRspSOPGroupExectueOrder(DFITCSOPRspGroupExectueOrderField *pData, DFITCSECRspInfoField *pRspInfo) {};
     /**
     * SOP-查询客户组合持仓明细响应
     * @param pData:指针若非空,返回用户查询客户组合持仓明细响应结构地址,表明查询客户组合持仓明细请求成功
@@ -391,17 +397,24 @@ public:
     * SOP-委托回报响应
     * @param pData:返回委托回报结构体的地址
     */
-    virtual void OnSOPEntrustOrderRtn(DFITCSOPEntrustOrderRtnField *pData){};
+    virtual void OnSOPEntrustOrderRtn(DFITCSOPEntrustOrderRtnField * pData){};
     /**
     * SOP-成交回报响应
     * @param pData:返回成交回报结构体的地址
     */
-    virtual void OnSOPTradeRtn(DFITCSOPTradeRtnField *pData){};
+    virtual void OnSOPTradeRtn(DFITCSOPTradeRtnField * pData){};
     /**
     * SOP-撤单回报响应
     * @param pData:返回撤单回报结构体的地址
     */
-    virtual void OnSOPWithdrawOrderRtn(DFITCSOPWithdrawOrderRtnField *pData){};
+    virtual void OnSOPWithdrawOrderRtn(DFITCSOPWithdrawOrderRtnField * pData){};
+
+	/**
+	* SOP-资金调入调出响应
+	* @param pData:指针若非空,返回资金调入调出响应信息结构地址,表明客户资金调入调出请求成功
+	* @param pRspInfo:指针若非空，返回错误信息地址，表明资金调入调出请求失败
+	*/
+	virtual void OnRspSOPCapitalTranInOut(DFITCSOPRspCapitalTranInOutField *pData, DFITCSECRspInfoField *pRspInfo) {};
 
     /**
     * FASL-登录响应
@@ -522,21 +535,21 @@ public:
     * @param pRspInfo:指针若非空，返回错误信息地址，表明客户委托查询请求失败
     * @param bIsLast:返回值表明是否是最后一笔响应信息(0-否,1-是)
     */
-    virtual void OnRspFASLQryEntrustOrder(DFITCStockRspQryEntrustOrderField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {};
+    virtual void OnRspFASLQryEntrustOrder(DFITCStockRspQryEntrustOrderField * pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {};
     /**
     * FASL-分笔成交查询响应
     * @param pData:指针若非空,返回用户分笔成交查询响应信息结构地址,表明客户分笔成交查询请求成功
     * @param pRspInfo:指针若非空，返回错误信息地址，表明客户分笔成交查询请求失败
     * @param bIsLast:返回值表明是否是最后一笔响应信息(0-否,1-是)
     */
-    virtual void OnRspFASLQrySerialTrade(DFITCStockRspQrySerialTradeField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {};
+    virtual void OnRspFASLQrySerialTrade(DFITCStockRspQrySerialTradeField * pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {};
     /**
     * FASL-实时成交查询响应
     * @param pData:指针若非空,返回用户实时成交查询响应信息结构地址,表明客户实时成交查询请求成功
     * @param pRspInfo:指针若非空，返回错误信息地址，表明客户实时成交查询请求失败
     * @param bIsLast:返回值表明是否是最后一笔响应信息(0-否,1-是)
     */
-    virtual void OnRspFASLQryRealTimeTrade(DFITCStockRspQryRealTimeTradeField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {};
+    virtual void OnRspFASLQryRealTimeTrade(DFITCStockRspQryRealTimeTradeField * pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) {};
     /**
     * FASL-资金冻结明细查询响应
     * @param pData:指针若非空,返回用户资金冻结明细查询响应信息结构地址,表明客户资金冻结明细查询请求成功
@@ -830,6 +843,12 @@ public:
      */
     virtual int ReqSOPGroupSplit(DFITCSOPReqGroupSplitField *p) = 0;
     /**
+     * SOP-期权组合行权委托请求
+     * @param p:指向用户期权组合行权委托请求结构的地址
+     * @return 0表示请求发送成功，其他值表示请求发送失败，具体错误请对照error.xml  
+     */
+    virtual int ReqSOPGroupExectueOrder(DFITCSOPReqGroupExectueOrderField *p) = 0;
+    /**
      * SOP-查询客户组合持仓明细请求
      * @param p:指向用户查询客户组合持仓明细请求结构的地址
      * @return 0表示请求发送成功，其他值表示请求发送失败，具体错误请对照error.xml
@@ -949,6 +968,13 @@ public:
      * @return 0表示请求发送成功，其他值表示请求发送失败，具体错误请对照error.xml  
      */
     virtual int ReqSOPQryContractObjectInfo(DFITCSOPReqQryContractObjectField *p) = 0;
+	/**
+	* SOP-资金调入调出请求
+	* @param p:指向用户资金调入调出请求结构的地址
+	* @return 0表示请求发送成功，其他值表示请求发送失败，具体错误请对照error.xml
+	*/
+	virtual int ReqSOPCapitalTranInOut(DFITCSOPReqCapitalTranInOutField *p) = 0;
+
     /**
      * FASL-登录请求
      * @param p:指向用户登录请求结构的地址
