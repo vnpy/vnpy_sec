@@ -72,6 +72,8 @@ void processRspSOPQuoteEntrustOrder(Task *task);
 
 void processRspSOPGroupSplit(Task *task);
 
+void processRspSOPGroupExectueOrder(Task *task);
+
 void processRspSOPQryGroupPosition(Task *task);
 
 void processRspSOPLockOUnLockStock(Task *task);
@@ -117,6 +119,8 @@ void processSOPEntrustOrderRtn(Task *task);
 void processSOPTradeRtn(Task *task);
 
 void processSOPWithdrawOrderRtn(Task *task);
+
+void processRspSOPCapitalTranInOut(Task *task);
 
 void processRspFASLUserLogin(Task *task);
 

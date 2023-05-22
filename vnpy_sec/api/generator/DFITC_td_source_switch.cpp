@@ -220,6 +220,12 @@ case ONRSPSOPGROUPSPLIT:
 	break;
 }
 
+case ONRSPSOPGROUPEXECTUEORDER:
+{
+	this->processRspSOPGroupExectueOrder(&task);
+	break;
+}
+
 case ONRSPSOPQRYGROUPPOSITION:
 {
 	this->processRspSOPQryGroupPosition(&task);
@@ -355,6 +361,12 @@ case ONSOPTRADERTN:
 case ONSOPWITHDRAWORDERRTN:
 {
 	this->processSOPWithdrawOrderRtn(&task);
+	break;
+}
+
+case ONRSPSOPCAPITALTRANINOUT:
+{
+	this->processRspSOPCapitalTranInOut(&task);
 	break;
 }
 

@@ -50,6 +50,8 @@ class StructGenerator:
             self.process_end(line)
         elif line.startswith("    DFITCSE"):
             self.process_member(line)
+        elif line.startswith("\tDFITCSE"):
+            self.process_member(line.replace("\t", ""))
 
     def process_declare(self, line: str):
         """处理声明"""

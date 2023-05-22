@@ -58,6 +58,8 @@ int reqSOPQuoteEntrustOrder(const dict &req);
 
 int reqSOPGroupSplit(const dict &req);
 
+int reqSOPGroupExectueOrder(const dict &req);
+
 int reqSOPQryGroupPosition(const dict &req);
 
 int reqSOPLockOUnLockStock(const dict &req);
@@ -97,6 +99,8 @@ int reqSOPQryCommission(const dict &req);
 int reqSOPQryDeposit(const dict &req);
 
 int reqSOPQryContractObjectInfo(const dict &req);
+
+int reqSOPCapitalTranInOut(const dict &req);
 
 int reqFASLUserLogin(const dict &req);
 

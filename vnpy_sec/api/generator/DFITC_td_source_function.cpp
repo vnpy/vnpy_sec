@@ -8,6 +8,7 @@ int TdApi::reqStockUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
+	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqStockUserLogin(&myreq);
 	return i;
 };
@@ -329,6 +330,7 @@ int TdApi::reqSOPUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
+	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqSOPUserLogin(&myreq);
 	return i;
 };
@@ -377,6 +379,7 @@ int TdApi::reqSOPEntrustOrder(const dict &req)
 	getInt(req, "serialID", &myreq.serialID);
 	getString(req, "devID", myreq.devID);
 	getString(req, "devDecInfo", myreq.devDecInfo);
+	getString(req, "groupCode", myreq.groupCode);
 	int i = this->api->ReqSOPEntrustOrder(&myreq);
 	return i;
 };
@@ -430,6 +433,27 @@ int TdApi::reqSOPGroupSplit(const dict &req)
 	getString(req, "devID", myreq.devID);
 	getString(req, "devDecInfo", myreq.devDecInfo);
 	int i = this->api->ReqSOPGroupSplit(&myreq);
+	return i;
+};
+
+int TdApi::reqSOPGroupExectueOrder(const dict &req)
+{
+	DFITCSOPReqGroupExectueOrderField myreq = DFITCSOPReqGroupExectueOrderField();
+	memset(&myreq, 0, sizeof(myreq));
+	getLong(req, "requestID", &myreq.requestID);
+	getString(req, "accountID", myreq.accountID);
+	getLong(req, "localOrderID", &myreq.localOrderID);
+	getString(req, "exchangeID", myreq.exchangeID);
+	getString(req, "securityOptionID1", myreq.securityOptionID1);
+	getString(req, "securityOptionID2", myreq.securityOptionID2);
+	getString(req, "subAccountID", myreq.subAccountID);
+	getInt(req, "entrustQty", &myreq.entrustQty);
+	getInt(req, "entrustDirection", &myreq.entrustDirection);
+	getInt(req, "openCloseFlag", &myreq.openCloseFlag);
+	getInt(req, "orderCategory", &myreq.orderCategory);
+	getString(req, "devID", myreq.devID);
+	getString(req, "devDecInfo", myreq.devDecInfo);
+	int i = this->api->ReqSOPGroupExectueOrder(&myreq);
 	return i;
 };
 
@@ -588,6 +612,7 @@ int TdApi::reqSOPCalcAbleEntrustQty(const dict &req)
 	getInt(req, "checkUpLimit", &myreq.checkUpLimit);
 	getString(req, "devID", myreq.devID);
 	getString(req, "devDecInfo", myreq.devDecInfo);
+	getString(req, "groupCode", myreq.groupCode);
 	int i = this->api->ReqSOPCalcAbleEntrustQty(&myreq);
 	return i;
 };
@@ -718,6 +743,20 @@ int TdApi::reqSOPQryContractObjectInfo(const dict &req)
 	return i;
 };
 
+int TdApi::reqSOPCapitalTranInOut(const dict &req)
+{
+	DFITCSOPReqCapitalTranInOutField myreq = DFITCSOPReqCapitalTranInOutField();
+	memset(&myreq, 0, sizeof(myreq));
+	getLong(req, "requestID", &myreq.requestID);
+	getString(req, "accountID", myreq.accountID);
+	getDouble(req, "allocationAmount", &myreq.allocationAmount);
+	getString(req, "currency", myreq.currency);
+	getString(req, "summaryMsg", myreq.summaryMsg);
+	getInt(req, "fundsTransFlag", &myreq.fundsTransFlag);
+	int i = this->api->ReqSOPCapitalTranInOut(&myreq);
+	return i;
+};
+
 int TdApi::reqFASLUserLogin(const dict &req)
 {
 	DFITCSECReqUserLoginField myreq = DFITCSECReqUserLoginField();
@@ -728,6 +767,7 @@ int TdApi::reqFASLUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
+	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqFASLUserLogin(&myreq);
 	return i;
 };

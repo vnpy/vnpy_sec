@@ -1261,6 +1261,37 @@ void TdApi::processRspSOPGroupSplit(Task *task)
 	this->onRspSOPGroupSplit(data, error);
 };
 
+void TdApi::processRspSOPGroupExectueOrder(Task *task)
+{
+	gil_scoped_acquire acquire;
+	dict data;
+	if (task->task_data)
+	{
+		DFITCSOPRspGroupExectueOrderField *task_data = (DFITCSOPRspGroupExectueOrderField*)task->task_data;
+		data["requestID"] = task_data->requestID;
+		data["accountID"] = toUtf(task_data->accountID);
+		data["localOrderID"] = task_data->localOrderID;
+		data["spdOrderID"] = task_data->spdOrderID;
+		data["entrustTime"] = toUtf(task_data->entrustTime);
+		data["freezeFunds"] = task_data->freezeFunds;
+		delete task_data;
+	}
+	dict error;
+	if (task->task_error)
+	{
+		DFITCSECRspInfoField *task_error = (DFITCSECRspInfoField*)task->task_error;
+		error["requestID"] = task_error->requestID;
+		error["sessionID"] = task_error->sessionID;
+		error["accountID"] = toUtf(task_error->accountID);
+		error["errorID"] = task_error->errorID;
+		error["localOrderID"] = task_error->localOrderID;
+		error["spdOrderID"] = task_error->spdOrderID;
+		error["errorMsg"] = toUtf(task_error->errorMsg);
+		delete task_error;
+	}
+	this->onRspSOPGroupExectueOrder(data, error);
+};
+
 void TdApi::processRspSOPQryGroupPosition(Task *task)
 {
 	gil_scoped_acquire acquire;
@@ -1413,6 +1444,12 @@ void TdApi::processRspSOPQryEntrustOrder(Task *task)
 		data["orderExpiryDate"] = task_data->orderExpiryDate;
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupType"] = task_data->groupType;
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	dict error;
@@ -1462,6 +1499,12 @@ void TdApi::processRspSOPQrySerialTrade(Task *task)
 		data["capitalID"] = toUtf(task_data->capitalID);
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupType"] = task_data->groupType;
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	dict error;
@@ -1596,6 +1639,7 @@ void TdApi::processRspSOPQryCapitalAccountInfo(Task *task)
 		data["cashAssets"] = task_data->cashAssets;
 		data["execGuaranteeRatio"] = task_data->execGuaranteeRatio;
 		data["buyLimits"] = task_data->buyLimits;
+		data["desirableFunds"] = task_data->desirableFunds;
 		delete task_data;
 	}
 	dict error;
@@ -2158,6 +2202,12 @@ void TdApi::processSOPEntrustOrderRtn(Task *task)
 		data["noteMsg"] = toUtf(task_data->noteMsg);
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupType"] = task_data->groupType;
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	this->onSOPEntrustOrderRtn(data);
@@ -2194,6 +2244,11 @@ void TdApi::processSOPTradeRtn(Task *task)
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
 		data["tradeTime"] = toUtf(task_data->tradeTime);
 		data["groupCode"] = toUtf(task_data->groupCode);
+		data["groupType"] = task_data->groupType;
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	this->onSOPTradeRtn(data);
@@ -2224,9 +2279,44 @@ void TdApi::processSOPWithdrawOrderRtn(Task *task)
 		data["wdUnFreezeFunds"] = task_data->wdUnFreezeFunds;
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
 		delete task_data;
 	}
 	this->onSOPWithdrawOrderRtn(data);
+};
+
+void TdApi::processRspSOPCapitalTranInOut(Task *task)
+{
+	gil_scoped_acquire acquire;
+	dict data;
+	if (task->task_data)
+	{
+		DFITCSOPRspCapitalTranInOutField *task_data = (DFITCSOPRspCapitalTranInOutField*)task->task_data;
+		data["requestID"] = task_data->requestID;
+		data["accountID"] = toUtf(task_data->accountID);
+		data["serialID"] = task_data->serialID;
+		data["accountBanlance"] = task_data->accountBanlance;
+		data["availableFunds"] = task_data->availableFunds;
+		data["t2AvailableFunds"] = task_data->t2AvailableFunds;
+		data["desirableFunds"] = task_data->desirableFunds;
+		delete task_data;
+	}
+	dict error;
+	if (task->task_error)
+	{
+		DFITCSECRspInfoField *task_error = (DFITCSECRspInfoField*)task->task_error;
+		error["requestID"] = task_error->requestID;
+		error["sessionID"] = task_error->sessionID;
+		error["accountID"] = toUtf(task_error->accountID);
+		error["errorID"] = task_error->errorID;
+		error["localOrderID"] = task_error->localOrderID;
+		error["spdOrderID"] = task_error->spdOrderID;
+		error["errorMsg"] = toUtf(task_error->errorMsg);
+		delete task_error;
+	}
+	this->onRspSOPCapitalTranInOut(data, error);
 };
 
 void TdApi::processRspFASLUserLogin(Task *task)
