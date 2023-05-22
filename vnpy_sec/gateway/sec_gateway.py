@@ -318,7 +318,10 @@ class SecMdApi(MdApi):
 
     def onSOPMarketData(self, data: dict) -> None:
         """股票期权行情数据推送"""
-        timestamp: str = str(data["tradingDay"]) + str(data["updateTime"])
+        time_str: str = data["updateTime"]
+        if not time_str:
+            time_str = str(datetime.now().time())
+        timestamp: str = str(data["tradingDay"]) + time_str
         dt: datetime = generate_datetime(timestamp)
 
         tick: TickData = TickData(
@@ -367,7 +370,10 @@ class SecMdApi(MdApi):
 
     def onStockMarketData(self, data: dict) -> None:
         """股票行情数据推送"""
-        timestamp: str = str(data["tradingDay"]) + str(data["updateTime"])
+        time_str: str = data["updateTime"]
+        if not time_str:
+            time_str = str(datetime.now().time())
+        timestamp: str = str(data["tradingDay"]) + time_str
         dt: datetime = generate_datetime(timestamp)
 
         tick: TickData = TickData(
