@@ -72,6 +72,8 @@ virtual void onRspSOPQuoteEntrustOrder(const dict &data, const dict &error) {};
 
 virtual void onRspSOPGroupSplit(const dict &data, const dict &error) {};
 
+virtual void onRspSOPGroupExectueOrder(const dict &data, const dict &error) {};
+
 virtual void onRspSOPQryGroupPosition(const dict &data, const dict &error, bool last) {};
 
 virtual void onRspSOPLockOUnLockStock(const dict &data, const dict &error, bool last) {};
@@ -117,6 +119,8 @@ virtual void onSOPEntrustOrderRtn(const dict &data) {};
 virtual void onSOPTradeRtn(const dict &data) {};
 
 virtual void onSOPWithdrawOrderRtn(const dict &data) {};
+
+virtual void onRspSOPCapitalTranInOut(const dict &data, const dict &error) {};
 
 virtual void onRspFASLUserLogin(const dict &data, const dict &error) {};
 

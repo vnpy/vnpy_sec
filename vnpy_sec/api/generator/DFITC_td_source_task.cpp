@@ -507,40 +507,40 @@ void TdApi::OnRspStockQryTradeTime(DFITCStockRspQryTradeTimeField *pData, DFITCS
 	this->task_queue.push(task);
 };
 
-void TdApi::OnStockEntrustOrderRtn(DFITCStockEntrustOrderRtnField *pData)
+void TdApi::OnStockEntrustOrderRtn(DFITCStockEntrustOrderRtnField * pData)
 {
 	Task task = Task();
 	task.task_name = ONSTOCKENTRUSTORDERRTN;
-	if (pData)
+	if ()
 	{
 		DFITCStockEntrustOrderRtnField *task_data = new DFITCStockEntrustOrderRtnField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	this->task_queue.push(task);
 };
 
-void TdApi::OnStockTradeRtn(DFITCStockTradeRtnField *pData)
+void TdApi::OnStockTradeRtn(DFITCStockTradeRtnField * pData)
 {
 	Task task = Task();
 	task.task_name = ONSTOCKTRADERTN;
-	if (pData)
+	if ()
 	{
 		DFITCStockTradeRtnField *task_data = new DFITCStockTradeRtnField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	this->task_queue.push(task);
 };
 
-void TdApi::OnStockWithdrawOrderRtn(DFITCStockWithdrawOrderRtnField *pData)
+void TdApi::OnStockWithdrawOrderRtn(DFITCStockWithdrawOrderRtnField * pData)
 {
 	Task task = Task();
 	task.task_name = ONSTOCKWITHDRAWORDERRTN;
-	if (pData)
+	if ()
 	{
 		DFITCStockWithdrawOrderRtnField *task_data = new DFITCStockWithdrawOrderRtnField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	this->task_queue.push(task);
@@ -648,6 +648,25 @@ void TdApi::OnRspSOPGroupSplit(DFITCSOPRspEntrustOrderField *pData, DFITCSECRspI
 	if (pData)
 	{
 		DFITCSOPRspEntrustOrderField *task_data = new DFITCSOPRspEntrustOrderField();
+		*task_data = *pData;
+		task.task_data = task_data;
+	}
+	if (pRspInfo)
+	{
+		DFITCSECRspInfoField *task_error = new DFITCSECRspInfoField();
+		*task_error = *pRspInfo;
+		task.task_error = task_error;
+	}
+	this->task_queue.push(task);
+};
+
+void TdApi::OnRspSOPGroupExectueOrder(DFITCSOPRspGroupExectueOrderField *pData, DFITCSECRspInfoField *pRspInfo) 
+{
+	Task task = Task();
+	task.task_name = ONRSPSOPGROUPEXECTUEORDER;
+	if (pData)
+	{
+		DFITCSOPRspGroupExectueOrderField *task_data = new DFITCSOPRspGroupExectueOrderField();
 		*task_data = *pData;
 		task.task_data = task_data;
 	}
@@ -1054,41 +1073,60 @@ void TdApi::OnRspSOPQryContractObjectInfo(DFITCSOPRspQryContractObjectField *pDa
 	this->task_queue.push(task);
 };
 
-void TdApi::OnSOPEntrustOrderRtn(DFITCSOPEntrustOrderRtnField *pData)
+void TdApi::OnSOPEntrustOrderRtn(DFITCSOPEntrustOrderRtnField * pData)
 {
 	Task task = Task();
 	task.task_name = ONSOPENTRUSTORDERRTN;
-	if (pData)
+	if ()
 	{
 		DFITCSOPEntrustOrderRtnField *task_data = new DFITCSOPEntrustOrderRtnField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	this->task_queue.push(task);
 };
 
-void TdApi::OnSOPTradeRtn(DFITCSOPTradeRtnField *pData)
+void TdApi::OnSOPTradeRtn(DFITCSOPTradeRtnField * pData)
 {
 	Task task = Task();
 	task.task_name = ONSOPTRADERTN;
-	if (pData)
+	if ()
 	{
 		DFITCSOPTradeRtnField *task_data = new DFITCSOPTradeRtnField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	this->task_queue.push(task);
 };
 
-void TdApi::OnSOPWithdrawOrderRtn(DFITCSOPWithdrawOrderRtnField *pData)
+void TdApi::OnSOPWithdrawOrderRtn(DFITCSOPWithdrawOrderRtnField * pData)
 {
 	Task task = Task();
 	task.task_name = ONSOPWITHDRAWORDERRTN;
-	if (pData)
+	if ()
 	{
 		DFITCSOPWithdrawOrderRtnField *task_data = new DFITCSOPWithdrawOrderRtnField();
+		*task_data = *;
+		task.task_data = task_data;
+	}
+	this->task_queue.push(task);
+};
+
+void TdApi::OnRspSOPCapitalTranInOut(DFITCSOPRspCapitalTranInOutField *pData, DFITCSECRspInfoField *pRspInfo) 
+{
+	Task task = Task();
+	task.task_name = ONRSPSOPCAPITALTRANINOUT;
+	if (pData)
+	{
+		DFITCSOPRspCapitalTranInOutField *task_data = new DFITCSOPRspCapitalTranInOutField();
 		*task_data = *pData;
 		task.task_data = task_data;
+	}
+	if (pRspInfo)
+	{
+		DFITCSECRspInfoField *task_error = new DFITCSECRspInfoField();
+		*task_error = *pRspInfo;
+		task.task_error = task_error;
 	}
 	this->task_queue.push(task);
 };
@@ -1441,14 +1479,14 @@ void TdApi::OnRspFASLQryPosition(DFITCStockRspQryPositionField *pData, DFITCSECR
 	this->task_queue.push(task);
 };
 
-void TdApi::OnRspFASLQryEntrustOrder(DFITCStockRspQryEntrustOrderField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) 
+void TdApi::OnRspFASLQryEntrustOrder(DFITCStockRspQryEntrustOrderField * pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) 
 {
 	Task task = Task();
 	task.task_name = ONRSPFASLQRYENTRUSTORDER;
-	if (pData)
+	if ()
 	{
 		DFITCStockRspQryEntrustOrderField *task_data = new DFITCStockRspQryEntrustOrderField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	if (pRspInfo)
@@ -1461,14 +1499,14 @@ void TdApi::OnRspFASLQryEntrustOrder(DFITCStockRspQryEntrustOrderField *pData, D
 	this->task_queue.push(task);
 };
 
-void TdApi::OnRspFASLQrySerialTrade(DFITCStockRspQrySerialTradeField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) 
+void TdApi::OnRspFASLQrySerialTrade(DFITCStockRspQrySerialTradeField * pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) 
 {
 	Task task = Task();
 	task.task_name = ONRSPFASLQRYSERIALTRADE;
-	if (pData)
+	if ()
 	{
 		DFITCStockRspQrySerialTradeField *task_data = new DFITCStockRspQrySerialTradeField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	if (pRspInfo)
@@ -1481,14 +1519,14 @@ void TdApi::OnRspFASLQrySerialTrade(DFITCStockRspQrySerialTradeField *pData, DFI
 	this->task_queue.push(task);
 };
 
-void TdApi::OnRspFASLQryRealTimeTrade(DFITCStockRspQryRealTimeTradeField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) 
+void TdApi::OnRspFASLQryRealTimeTrade(DFITCStockRspQryRealTimeTradeField * pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast) 
 {
 	Task task = Task();
 	task.task_name = ONRSPFASLQRYREALTIMETRADE;
-	if (pData)
+	if ()
 	{
 		DFITCStockRspQryRealTimeTradeField *task_data = new DFITCStockRspQryRealTimeTradeField();
-		*task_data = *pData;
+		*task_data = *;
 		task.task_data = task_data;
 	}
 	if (pRspInfo)

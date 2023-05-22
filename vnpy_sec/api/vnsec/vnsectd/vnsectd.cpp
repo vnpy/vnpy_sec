@@ -669,6 +669,25 @@ void TdApi::OnRspSOPGroupSplit(DFITCSOPRspEntrustOrderField *pData, DFITCSECRspI
 	this->task_queue.push(task);
 };
 
+void TdApi::OnRspSOPGroupExectueOrder(DFITCSOPRspGroupExectueOrderField* pData, DFITCSECRspInfoField* pRspInfo)
+{
+	Task task = Task();
+	task.task_name = ONRSPSOPGROUPEXECTUEORDER;
+	if (pData)
+	{
+		DFITCSOPRspGroupExectueOrderField* task_data = new DFITCSOPRspGroupExectueOrderField();
+		*task_data = *pData;
+		task.task_data = task_data;
+	}
+	if (pRspInfo)
+	{
+		DFITCSECRspInfoField* task_error = new DFITCSECRspInfoField();
+		*task_error = *pRspInfo;
+		task.task_error = task_error;
+	}
+	this->task_queue.push(task);
+};
+
 void TdApi::OnRspSOPQryGroupPosition(DFITCSOPRspQryGroupPositionField *pData, DFITCSECRspInfoField *pRspInfo, bool bIsLast)
 {
 	Task task = Task();
@@ -1098,6 +1117,25 @@ void TdApi::OnSOPWithdrawOrderRtn(DFITCSOPWithdrawOrderRtnField *pData)
 		DFITCSOPWithdrawOrderRtnField *task_data = new DFITCSOPWithdrawOrderRtnField();
 		*task_data = *pData;
 		task.task_data = task_data;
+	}
+	this->task_queue.push(task);
+};
+
+void TdApi::OnRspSOPCapitalTranInOut(DFITCSOPRspCapitalTranInOutField* pData, DFITCSECRspInfoField* pRspInfo)
+{
+	Task task = Task();
+	task.task_name = ONRSPSOPCAPITALTRANINOUT;
+	if (pData)
+	{
+		DFITCSOPRspCapitalTranInOutField* task_data = new DFITCSOPRspCapitalTranInOutField();
+		*task_data = *pData;
+		task.task_data = task_data;
+	}
+	if (pRspInfo)
+	{
+		DFITCSECRspInfoField* task_error = new DFITCSECRspInfoField();
+		*task_error = *pRspInfo;
+		task.task_error = task_error;
 	}
 	this->task_queue.push(task);
 };
@@ -1962,6 +2000,12 @@ void TdApi::processTask()
 				break;
 			}
 
+			case ONRSPSOPGROUPEXECTUEORDER:
+			{
+				this->processRspSOPGroupExectueOrder(&task);
+				break;
+			}
+
 			case ONRSPSOPQRYGROUPPOSITION:
 			{
 				this->processRspSOPQryGroupPosition(&task);
@@ -2097,6 +2141,12 @@ void TdApi::processTask()
 			case ONSOPWITHDRAWORDERRTN:
 			{
 				this->processSOPWithdrawOrderRtn(&task);
+				break;
+			}
+
+			case ONRSPSOPCAPITALTRANINOUT:
+			{
+				this->processRspSOPCapitalTranInOut(&task);
 				break;
 			}
 
@@ -3569,6 +3619,37 @@ void TdApi::processRspSOPGroupSplit(Task *task)
 	this->onRspSOPGroupSplit(data, error);
 };
 
+void TdApi::processRspSOPGroupExectueOrder(Task* task)
+{
+	gil_scoped_acquire acquire;
+	dict data;
+	if (task->task_data)
+	{
+		DFITCSOPRspGroupExectueOrderField* task_data = (DFITCSOPRspGroupExectueOrderField*)task->task_data;
+		data["requestID"] = task_data->requestID;
+		data["accountID"] = toUtf(task_data->accountID);
+		data["localOrderID"] = task_data->localOrderID;
+		data["spdOrderID"] = task_data->spdOrderID;
+		data["entrustTime"] = toUtf(task_data->entrustTime);
+		data["freezeFunds"] = task_data->freezeFunds;
+		delete task_data;
+	}
+	dict error;
+	if (task->task_error)
+	{
+		DFITCSECRspInfoField* task_error = (DFITCSECRspInfoField*)task->task_error;
+		error["requestID"] = task_error->requestID;
+		error["sessionID"] = task_error->sessionID;
+		error["accountID"] = toUtf(task_error->accountID);
+		error["errorID"] = task_error->errorID;
+		error["localOrderID"] = task_error->localOrderID;
+		error["spdOrderID"] = task_error->spdOrderID;
+		error["errorMsg"] = toUtf(task_error->errorMsg);
+		delete task_error;
+	}
+	this->onRspSOPGroupExectueOrder(data, error);
+};
+
 void TdApi::processRspSOPQryGroupPosition(Task *task)
 {
 	gil_scoped_acquire acquire;
@@ -3721,6 +3802,12 @@ void TdApi::processRspSOPQryEntrustOrder(Task *task)
 		data["orderExpiryDate"] = task_data->orderExpiryDate;
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupType"] = task_data->groupType;
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	dict error;
@@ -3770,6 +3857,12 @@ void TdApi::processRspSOPQrySerialTrade(Task *task)
 		data["capitalID"] = toUtf(task_data->capitalID);
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupType"] = task_data->groupType;
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	dict error;
@@ -3904,6 +3997,7 @@ void TdApi::processRspSOPQryCapitalAccountInfo(Task *task)
 		data["cashAssets"] = task_data->cashAssets;
 		data["execGuaranteeRatio"] = task_data->execGuaranteeRatio;
 		data["buyLimits"] = task_data->buyLimits;
+		data["desirableFunds"] = task_data->desirableFunds;
 		delete task_data;
 	}
 	dict error;
@@ -4466,6 +4560,12 @@ void TdApi::processSOPEntrustOrderRtn(Task *task)
 		data["noteMsg"] = toUtf(task_data->noteMsg);
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupType"] = task_data->groupType;
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	this->onSOPEntrustOrderRtn(data);
@@ -4502,6 +4602,11 @@ void TdApi::processSOPTradeRtn(Task *task)
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
 		data["tradeTime"] = toUtf(task_data->tradeTime);
 		data["groupCode"] = toUtf(task_data->groupCode);
+		data["groupType"] = task_data->groupType;
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
+		data["securityOptionID3"] = toUtf(task_data->securityOptionID3);
+		data["securityOptionID4"] = toUtf(task_data->securityOptionID4);
 		delete task_data;
 	}
 	this->onSOPTradeRtn(data);
@@ -4532,9 +4637,44 @@ void TdApi::processSOPWithdrawOrderRtn(Task *task)
 		data["wdUnFreezeFunds"] = task_data->wdUnFreezeFunds;
 		data["devID"] = toUtf(task_data->devID);
 		data["devDecInfo"] = toUtf(task_data->devDecInfo);
+		data["groupCode"] = toUtf(task_data->groupCode);
+		data["securityOptionID1"] = toUtf(task_data->securityOptionID1);
+		data["securityOptionID2"] = toUtf(task_data->securityOptionID2);
 		delete task_data;
 	}
 	this->onSOPWithdrawOrderRtn(data);
+};
+
+void TdApi::processRspSOPCapitalTranInOut(Task* task)
+{
+	gil_scoped_acquire acquire;
+	dict data;
+	if (task->task_data)
+	{
+		DFITCSOPRspCapitalTranInOutField* task_data = (DFITCSOPRspCapitalTranInOutField*)task->task_data;
+		data["requestID"] = task_data->requestID;
+		data["accountID"] = toUtf(task_data->accountID);
+		data["serialID"] = task_data->serialID;
+		data["accountBanlance"] = task_data->accountBanlance;
+		data["availableFunds"] = task_data->availableFunds;
+		data["t2AvailableFunds"] = task_data->t2AvailableFunds;
+		data["desirableFunds"] = task_data->desirableFunds;
+		delete task_data;
+	}
+	dict error;
+	if (task->task_error)
+	{
+		DFITCSECRspInfoField* task_error = (DFITCSECRspInfoField*)task->task_error;
+		error["requestID"] = task_error->requestID;
+		error["sessionID"] = task_error->sessionID;
+		error["accountID"] = toUtf(task_error->accountID);
+		error["errorID"] = task_error->errorID;
+		error["localOrderID"] = task_error->localOrderID;
+		error["spdOrderID"] = task_error->spdOrderID;
+		error["errorMsg"] = toUtf(task_error->errorMsg);
+		delete task_error;
+	}
+	this->onRspSOPCapitalTranInOut(data, error);
 };
 
 void TdApi::processRspFASLUserLogin(Task *task)
@@ -5871,6 +6011,7 @@ int TdApi::reqStockUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
+	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqStockUserLogin(&myreq);
 	return i;
 };
@@ -6192,6 +6333,7 @@ int TdApi::reqSOPUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
+	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqSOPUserLogin(&myreq);
 	return i;
 };
@@ -6240,6 +6382,7 @@ int TdApi::reqSOPEntrustOrder(const dict &req)
 	getInt(req, "serialID", &myreq.serialID);
 	getString(req, "devID", myreq.devID);
 	getString(req, "devDecInfo", myreq.devDecInfo);
+	getString(req, "groupCode", myreq.groupCode);
 	int i = this->api->ReqSOPEntrustOrder(&myreq);
 	return i;
 };
@@ -6293,6 +6436,27 @@ int TdApi::reqSOPGroupSplit(const dict &req)
 	getString(req, "devID", myreq.devID);
 	getString(req, "devDecInfo", myreq.devDecInfo);
 	int i = this->api->ReqSOPGroupSplit(&myreq);
+	return i;
+};
+
+int TdApi::reqSOPGroupExectueOrder(const dict& req)
+{
+	DFITCSOPReqGroupExectueOrderField myreq = DFITCSOPReqGroupExectueOrderField();
+	memset(&myreq, 0, sizeof(myreq));
+	getLong(req, "requestID", &myreq.requestID);
+	getString(req, "accountID", myreq.accountID);
+	getLong(req, "localOrderID", &myreq.localOrderID);
+	getString(req, "exchangeID", myreq.exchangeID);
+	getString(req, "securityOptionID1", myreq.securityOptionID1);
+	getString(req, "securityOptionID2", myreq.securityOptionID2);
+	getString(req, "subAccountID", myreq.subAccountID);
+	getInt(req, "entrustQty", &myreq.entrustQty);
+	getInt(req, "entrustDirection", &myreq.entrustDirection);
+	getInt(req, "openCloseFlag", &myreq.openCloseFlag);
+	getInt(req, "orderCategory", &myreq.orderCategory);
+	getString(req, "devID", myreq.devID);
+	getString(req, "devDecInfo", myreq.devDecInfo);
+	int i = this->api->ReqSOPGroupExectueOrder(&myreq);
 	return i;
 };
 
@@ -6451,6 +6615,7 @@ int TdApi::reqSOPCalcAbleEntrustQty(const dict &req)
 	getInt(req, "checkUpLimit", &myreq.checkUpLimit);
 	getString(req, "devID", myreq.devID);
 	getString(req, "devDecInfo", myreq.devDecInfo);
+	getString(req, "groupCode", myreq.groupCode);
 	int i = this->api->ReqSOPCalcAbleEntrustQty(&myreq);
 	return i;
 };
@@ -6581,6 +6746,20 @@ int TdApi::reqSOPQryContractObjectInfo(const dict &req)
 	return i;
 };
 
+int TdApi::reqSOPCapitalTranInOut(const dict& req)
+{
+	DFITCSOPReqCapitalTranInOutField myreq = DFITCSOPReqCapitalTranInOutField();
+	memset(&myreq, 0, sizeof(myreq));
+	getLong(req, "requestID", &myreq.requestID);
+	getString(req, "accountID", myreq.accountID);
+	getDouble(req, "allocationAmount", &myreq.allocationAmount);
+	getString(req, "currency", myreq.currency);
+	getString(req, "summaryMsg", myreq.summaryMsg);
+	getInt(req, "fundsTransFlag", &myreq.fundsTransFlag);
+	int i = this->api->ReqSOPCapitalTranInOut(&myreq);
+	return i;
+};
+
 int TdApi::reqFASLUserLogin(const dict &req)
 {
 	DFITCSECReqUserLoginField myreq = DFITCSECReqUserLoginField();
@@ -6591,6 +6770,7 @@ int TdApi::reqFASLUserLogin(const dict &req)
 	getInt(req, "compressflag", &myreq.compressflag);
 	getString(req, "authenticCode", myreq.authenticCode);
 	getString(req, "appID", myreq.appID);
+	getInt(req, "collectInterType", &myreq.collectInterType);
 	int i = this->api->ReqFASLUserLogin(&myreq);
 	return i;
 };
@@ -7437,6 +7617,18 @@ public:
 		}
 	};
 
+	void onRspSOPGroupExectueOrder(const dict& data, const dict& error) override
+	{
+		try
+		{
+			PYBIND11_OVERLOAD(void, TdApi, onRspSOPGroupExectueOrder, data, error);
+		}
+		catch (const error_already_set& e)
+		{
+			cout << e.what() << endl;
+		}
+	};
+
 	void onRspSOPQryGroupPosition(const dict &data, const dict &error, bool last) override
 	{
 		try
@@ -7708,6 +7900,18 @@ public:
 			PYBIND11_OVERLOAD(void, TdApi, onSOPWithdrawOrderRtn, data);
 		}
 		catch (const error_already_set &e)
+		{
+			cout << e.what() << endl;
+		}
+	};
+
+	void onRspSOPCapitalTranInOut(const dict& data, const dict& error) override
+	{
+		try
+		{
+			PYBIND11_OVERLOAD(void, TdApi, onRspSOPCapitalTranInOut, data, error);
+		}
+		catch (const error_already_set& e)
 		{
 			cout << e.what() << endl;
 		}
@@ -8151,6 +8355,7 @@ PYBIND11_MODULE(vnsectd, m)
 		.def("reqSOPEntrustOrder", &TdApi::reqSOPEntrustOrder)
 		.def("reqSOPQuoteEntrustOrder", &TdApi::reqSOPQuoteEntrustOrder)
 		.def("reqSOPGroupSplit", &TdApi::reqSOPGroupSplit)
+		.def("reqSOPGroupExectueOrder", &TdApi::reqSOPGroupExectueOrder)
 		.def("reqSOPQryGroupPosition", &TdApi::reqSOPQryGroupPosition)
 		.def("reqSOPLockOUnLockStock", &TdApi::reqSOPLockOUnLockStock)
 		.def("reqSOPWithdrawOrder", &TdApi::reqSOPWithdrawOrder)
@@ -8171,6 +8376,7 @@ PYBIND11_MODULE(vnsectd, m)
 		.def("reqSOPQryCommission", &TdApi::reqSOPQryCommission)
 		.def("reqSOPQryDeposit", &TdApi::reqSOPQryDeposit)
 		.def("reqSOPQryContractObjectInfo", &TdApi::reqSOPQryContractObjectInfo)
+		.def("reqSOPCapitalTranInOut", &TdApi::reqSOPCapitalTranInOut)
 		.def("reqFASLUserLogin", &TdApi::reqFASLUserLogin)
 		.def("reqFASLUserLogout", &TdApi::reqFASLUserLogout)
 		.def("reqFASLQryAbleFinInfo", &TdApi::reqFASLQryAbleFinInfo)
@@ -8239,6 +8445,7 @@ PYBIND11_MODULE(vnsectd, m)
 		.def("onRspSOPEntrustOrder", &TdApi::onRspSOPEntrustOrder)
 		.def("onRspSOPQuoteEntrustOrder", &TdApi::onRspSOPQuoteEntrustOrder)
 		.def("onRspSOPGroupSplit", &TdApi::onRspSOPGroupSplit)
+		.def("onRspSOPGroupExectueOrder", &TdApi::onRspSOPGroupExectueOrder)
 		.def("onRspSOPQryGroupPosition", &TdApi::onRspSOPQryGroupPosition)
 		.def("onRspSOPLockOUnLockStock", &TdApi::onRspSOPLockOUnLockStock)
 		.def("onRspSOPWithdrawOrder", &TdApi::onRspSOPWithdrawOrder)
@@ -8262,6 +8469,7 @@ PYBIND11_MODULE(vnsectd, m)
 		.def("onSOPEntrustOrderRtn", &TdApi::onSOPEntrustOrderRtn)
 		.def("onSOPTradeRtn", &TdApi::onSOPTradeRtn)
 		.def("onSOPWithdrawOrderRtn", &TdApi::onSOPWithdrawOrderRtn)
+		.def("onRspSOPCapitalTranInOut", &TdApi::onRspSOPCapitalTranInOut)
 		.def("onRspFASLUserLogin", &TdApi::onRspFASLUserLogin)
 		.def("onRspFASLUserLogout", &TdApi::onRspFASLUserLogout)
 		.def("onRspFASLQryAbleFinInfo", &TdApi::onRspFASLQryAbleFinInfo)

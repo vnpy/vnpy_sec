@@ -4,7 +4,7 @@
  * 文件说明：定义接口所需的数据类型的头文件
  * 当前版本：1.6
  * 作者：XSpeed证券项目组
- * 发布日期：2017年01月
+ * 发布日期：2019年11月
  */
 
 #ifndef DFITCSECAPIDATATYPE_H
@@ -766,6 +766,8 @@ typedef int    DFITCSECOpenCloseFlagType;
 #define DFITCSEC_OCF_ToPrePare                           21
 ///转现金
 #define DFITCSEC_OCF_ToCash                              22
+///组合行权
+#define DFITCSEC_OCF_GroupExecute                        23
 
 /////////////////////////////////////////////////////////////////////////
 ///DFITCSECCoveredFlagType 是一个备兑标志类型
@@ -1178,6 +1180,19 @@ typedef int    DFITCSECMDCompressFalgType;
 #define DFITCSEC_COMPRESS_TRUE                                       1
 
 //////////////////////////////////////////////////////////////////////////
+///DFITCSECCollectInterfaceType 看穿式监管采集接口类型
+//////////////////////////////////////////////////////////////////////////
+typedef int    DFITCSECCollectInterfaceType;
+///顶点采集接口
+#define DFITCSEC_COLLECTTYPE_APEX                                    1
+///恒生采集接口
+#define DFITCSEC_COLLECTTYPE_HS                                      2
+///金证采集接口
+#define DFITCSEC_COLLECTTYPE_KD                                      3
+///金仕达采集接口
+#define DFITCSEC_COLLECTTYPE_KS                                      4
+
+//////////////////////////////////////////////////////////////////////////
 ///看穿式监管使用类型
 //////////////////////////////////////////////////////////////////////////
 ///看穿式监管连接类型
@@ -1188,6 +1203,8 @@ typedef int     DFITCSECConnectType;
 #define DFITCSEC_CONNECT_RELAY  2
 ///采集信息
 typedef char    DFITCSECSystemInfo[1024];
+///采集信息完整性
+typedef char    DFITCSECSystemInfoIntegrity[512];
 ///秘钥版本
 typedef char    DFITCSECSecretkeyVer[1024];
 ///AppID

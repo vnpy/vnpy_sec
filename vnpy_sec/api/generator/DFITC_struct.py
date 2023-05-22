@@ -19,6 +19,7 @@ DFITCSECReqUserLoginField = {
     "compressflag": "int",
     "authenticCode": "string",
     "appID": "string",
+    "collectInterType": "int",
 }
 
 DFITCSECRspUserLoginField = {
@@ -696,6 +697,7 @@ DFITCSOPReqEntrustOrderField = {
     "serialID": "int",
     "devID": "string",
     "devDecInfo": "string",
+    "groupCode": "string",
 }
 
 DFITCSOPRspEntrustOrderField = {
@@ -731,6 +733,12 @@ DFITCSOPEntrustOrderRtnField = {
     "noteMsg": "string",
     "devID": "string",
     "devDecInfo": "string",
+    "groupType": "int",
+    "groupCode": "string",
+    "securityOptionID1": "string",
+    "securityOptionID2": "string",
+    "securityOptionID3": "string",
+    "securityOptionID4": "string",
 }
 
 DFITCSOPTradeRtnField = {
@@ -758,6 +766,11 @@ DFITCSOPTradeRtnField = {
     "devDecInfo": "string",
     "tradeTime": "string",
     "groupCode": "string",
+    "groupType": "int",
+    "securityOptionID1": "string",
+    "securityOptionID2": "string",
+    "securityOptionID3": "string",
+    "securityOptionID4": "string",
 }
 
 DFITCSOPWithdrawOrderRtnField = {
@@ -779,6 +792,9 @@ DFITCSOPWithdrawOrderRtnField = {
     "wdUnFreezeFunds": "double",
     "devID": "string",
     "devDecInfo": "string",
+    "groupCode": "string",
+    "securityOptionID1": "string",
+    "securityOptionID2": "string",
 }
 
 DFITCSOPReqQuoteEntrustOrderField = {
@@ -875,6 +891,12 @@ DFITCSOPRspQrySerialTradeField = {
     "capitalID": "string",
     "devID": "string",
     "devDecInfo": "string",
+    "groupType": "int",
+    "groupCode": "string",
+    "securityOptionID1": "string",
+    "securityOptionID2": "string",
+    "securityOptionID3": "string",
+    "securityOptionID4": "string",
 }
 
 DFITCSOPReqQryEntrustOrderField = {
@@ -932,6 +954,12 @@ DFITCSOPRspQryEntrustOrderField = {
     "orderExpiryDate": "int",
     "devID": "string",
     "devDecInfo": "string",
+    "groupType": "int",
+    "groupCode": "string",
+    "securityOptionID1": "string",
+    "securityOptionID2": "string",
+    "securityOptionID3": "string",
+    "securityOptionID4": "string",
 }
 
 DFITCSOPReqQryPositionField = {
@@ -1023,6 +1051,7 @@ DFITCSOPRspQryCapitalAccountField = {
     "cashAssets": "double",
     "execGuaranteeRatio": "double",
     "buyLimits": "double",
+    "desirableFunds": "double",
 }
 
 DFITCSOPReqQryAccountField = {
@@ -1062,6 +1091,7 @@ DFITCSOPReqCalcAbleEntrustQtyField = {
     "checkUpLimit": "int",
     "devID": "string",
     "devDecInfo": "string",
+    "groupCode": "string",
 }
 
 DFITCSOPRspCalcAbleEntrustQtyField = {
@@ -1925,6 +1955,31 @@ DFITCSOPReqGroupSplitField = {
     "devDecInfo": "string",
 }
 
+DFITCSOPReqGroupExectueOrderField = {
+    "requestID": "int",
+    "accountID": "string",
+    "localOrderID": "int",
+    "exchangeID": "string",
+    "securityOptionID1": "string",
+    "securityOptionID2": "string",
+    "subAccountID": "string",
+    "entrustQty": "int",
+    "entrustDirection": "int",
+    "openCloseFlag": "int",
+    "orderCategory": "int",
+    "devID": "string",
+    "devDecInfo": "string",
+}
+
+DFITCSOPRspGroupExectueOrderField = {
+    "requestID": "int",
+    "accountID": "string",
+    "localOrderID": "int",
+    "spdOrderID": "int",
+    "entrustTime": "string",
+    "freezeFunds": "double",
+}
+
 DFITCSOPReqQryGroupPositionField = {
     "requestID": "int",
     "accountID": "string",
@@ -1959,4 +2014,25 @@ DFITCTerminalInfoField = {
     "clientPublicIP": "string",
     "clientPublicPort": "int",
     "clientLoginTime": "string",
+    "systemInfo_integrity": "string",
 }
+
+DFITCSOPReqCapitalTranInOutField = {
+    "requestID": "int",
+    "accountID": "string",
+    "allocationAmount": "double",
+    "currency": "string",
+    "summaryMsg": "string",
+    "fundsTransFlag": "int",
+}
+
+DFITCSOPRspCapitalTranInOutField = {
+    "requestID": "int",
+    "accountID": "string",
+    "serialID": "int",
+    "accountBanlance": "double",
+    "availableFunds": "double",
+    "t2AvailableFunds": "double",
+    "desirableFunds": "double",
+}
+

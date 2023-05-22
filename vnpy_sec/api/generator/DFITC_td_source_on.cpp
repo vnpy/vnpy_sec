@@ -442,6 +442,18 @@ void onRspSOPGroupSplit(const dict &data, const dict &error) override
 	}
 };
 
+void onRspSOPGroupExectueOrder(const dict &data, const dict &error) override
+{
+	try
+	{
+		PYBIND11_OVERLOAD(void, TdApi, onRspSOPGroupExectueOrder, data, error);
+	}
+	catch (const error_already_set &e)
+	{
+		cout << e.what() << endl;
+	}
+};
+
 void onRspSOPQryGroupPosition(const dict &data, const dict &error, bool last) override
 {
 	try
@@ -711,6 +723,18 @@ void onSOPWithdrawOrderRtn(const dict &data) override
 	try
 	{
 		PYBIND11_OVERLOAD(void, TdApi, onSOPWithdrawOrderRtn, data);
+	}
+	catch (const error_already_set &e)
+	{
+		cout << e.what() << endl;
+	}
+};
+
+void onRspSOPCapitalTranInOut(const dict &data, const dict &error) override
+{
+	try
+	{
+		PYBIND11_OVERLOAD(void, TdApi, onRspSOPCapitalTranInOut, data, error);
 	}
 	catch (const error_already_set &e)
 	{
