@@ -1,3 +1,5 @@
+"""顶点飞创证券接口常量。"""
+
 DFITCSEC_BT_Stock = 0
 DFITCSEC_BT_SOP = 1
 DFITCSEC_BT_FASL = 2

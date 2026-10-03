@@ -1,3 +1,5 @@
+"""实现顶点飞创证券交易接口。"""
+
 from typing import Any
 from datetime import datetime
 from copy import copy
@@ -248,6 +250,7 @@ class SecGateway(BaseGateway):
 
 
 class SecMdApi(MdApi):
+    """对接顶点飞创证券柜台的行情接口。"""
 
     def __init__(self, gateway: SecGateway):
         """构造函数"""
@@ -486,6 +489,7 @@ class SecMdApi(MdApi):
 
 
 class SecTdApi(TdApi):
+    """对接顶点飞创证券柜台的交易接口。"""
 
     def __init__(self, gateway: SecGateway):
         """构造函数"""
