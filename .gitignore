@@ -41,3 +41,7 @@ dist/
 *.egg-info/
 
 /.mypy_cache
+
+# Type checker / linter / test caches
+.ruff_cache/
+.pytest_cache/

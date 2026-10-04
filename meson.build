@@ -90,7 +90,14 @@ if host_machine.system() == 'windows'
     api_libs,
     install_dir: py.get_install_dir() / 'vnpy_sec/api'
   )
-  
+
+  # 可编辑安装的扩展在构建目录，厂商库仍在源码树。
+  # 拷到扩展旁边后，Windows 在 .pyd 所在目录找 DLL。
+  # 这些拷贝不安装；正式安装仍由上面的 install_data 放到 site-packages。
+  foreach lib : api_libs
+    fs.copyfile(lib)
+  endforeach
+
 else
   # 非 Windows 平台提示
   warning('当前平台 (' + host_machine.system() + ') 不支持编译 C++ 扩展，仅安装 Python 源代码')
