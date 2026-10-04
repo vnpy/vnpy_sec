@@ -1,5 +1,6 @@
 """实现顶点飞创证券交易接口。"""
 
+from collections.abc import Callable
 from typing import Any
 from datetime import datetime
 from copy import copy
@@ -115,7 +116,7 @@ COMPRESS_VT2SEC: dict[str, int] = {
 }
 
 # 其他常量
-CHINA_TZ = ZoneInfo("Asia/Shanghai")
+CHINA_TZ: ZoneInfo = ZoneInfo("Asia/Shanghai")
 
 # 合约数据全局缓存字典
 symbol_contract_map: dict[str, ContractData] = {}
@@ -238,7 +239,7 @@ class SecGateway(BaseGateway):
             return
         self.count = 0
 
-        func = self.query_functions.pop(0)
+        func: Callable[[], None] = self.query_functions.pop(0)
         func()
         self.query_functions.append(func)
 
@@ -252,7 +253,7 @@ class SecGateway(BaseGateway):
 class SecMdApi(MdApi):
     """对接顶点飞创证券柜台的行情接口。"""
 
-    def __init__(self, gateway: SecGateway):
+    def __init__(self, gateway: SecGateway) -> None:
         """构造函数"""
         super().__init__()
 
@@ -285,7 +286,7 @@ class SecMdApi(MdApi):
         """服务器连接断开回报"""
         self.connect_status = False
         self.login_status = False
-        self.login_status_option = False
+        self.login_status_option: bool = False
         self.gateway.write_log(f"行情服务器连接断开, 原因{reason}")
 
     def onRspStockUserLogin(self, data: dict, error: dict) -> None:
@@ -491,7 +492,7 @@ class SecMdApi(MdApi):
 class SecTdApi(TdApi):
     """对接顶点飞创证券柜台的交易接口。"""
 
-    def __init__(self, gateway: SecGateway):
+    def __init__(self, gateway: SecGateway) -> None:
         """构造函数"""
         super().__init__()
 
@@ -863,6 +864,9 @@ class SecTdApi(TdApi):
                 ("510300", Exchange.SSE, "华泰柏瑞沪深300ETF"),
                 ("159919", Exchange.SZSE, "嘉实沪深300ETF"),
             ]
+            symbol: str
+            exchange: Exchange
+            name: str
             for symbol, exchange, name in etfs:
                 contract = ContractData(
                     symbol=symbol,
@@ -1038,6 +1042,8 @@ class SecTdApi(TdApi):
     def cancel_order(self, req: CancelRequest) -> None:
         """委托撤单"""
         self.reqid += 1
+        sessionid: str
+        localid: str
         sessionid, localid = req.orderid.split("_")
 
         sec_req: dict = {
@@ -1070,6 +1076,7 @@ class SecTdApi(TdApi):
     def query_position(self) -> None:
         """查询资金"""
         # 清除缓存的持仓数量和价格
+        pos: PositionData
         for pos in self.positions.values():
             pos.volume = 0
             pos.price = 0
