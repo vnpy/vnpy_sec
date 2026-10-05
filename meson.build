@@ -1,7 +1,7 @@
 project(
   'vnpy_sec',
   'cpp',
-  version: '1.1.0',
+  version: '1.1.1',
   license: 'MIT',
   meson_version: '>=1.7.0',
   default_options: [
